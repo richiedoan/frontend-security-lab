@@ -1,0 +1,37 @@
+# Installed dependencies (all workspaces)
+node_modules/
+
+# Generated builds, test output, and caches
+.next/
+dist/
+out/
+coverage/
+.nyc_output/
+*.tsbuildinfo
+next-env.d.ts
+.eslintcache
+
+# Local environment settings; keep shareable templates
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Local runtime state and private keys
+.local/
+*.pem
+*.key
+
+# Runtime and package-manager logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local editor and operating-system files
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~

@@ -1,0 +1,16 @@
+{
+  "name": "frontend-security-lab",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "yarn@1.22.22",
+  "workspaces": ["apps/*"],
+  "scripts": {
+    "dev": "concurrently -k -n web,attacker,api -c blue,magenta,green \"yarn workspace @frontend-security-lab/web dev\" \"yarn workspace @frontend-security-lab/attacker dev\" \"yarn workspace @frontend-security-lab/api start:dev\"",
+    "lint": "yarn workspace @frontend-security-lab/web lint && yarn workspace @frontend-security-lab/attacker lint && yarn workspace @frontend-security-lab/api lint",
+    "test": "yarn workspace @frontend-security-lab/web test && yarn workspace @frontend-security-lab/attacker test && yarn workspace @frontend-security-lab/api test",
+    "test:security": "node scripts/security-regression.mjs",
+    "build": "yarn workspace @frontend-security-lab/web build && yarn workspace @frontend-security-lab/attacker build && yarn workspace @frontend-security-lab/api build",
+    "typecheck": "yarn workspace @frontend-security-lab/web typecheck && yarn workspace @frontend-security-lab/attacker typecheck && yarn workspace @frontend-security-lab/api typecheck"
+  },
+  "devDependencies": { "concurrently": "^9.2.1" }
+}

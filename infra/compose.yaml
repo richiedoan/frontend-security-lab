@@ -1,0 +1,55 @@
+name: frontend-security-lab-infra
+
+services:
+  postgres:
+    image: postgres:17.6-bookworm
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?Copy .env.example to .env}
+      POSTGRES_USER: ${POSTGRES_USER:?Copy .env.example to .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Copy .env.example to .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.7.2
+    command: ["start-dev", "--import-realm"]
+    volumes:
+      - ./keycloak/realms:/opt/keycloak/data/import:ro
+    environment:
+      KC_DB: ${KC_DB:?Copy .env.example to .env}
+      KC_DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:?Copy .env.example to .env}
+      KC_DB_USERNAME: ${POSTGRES_USER:?Copy .env.example to .env}
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD:?Copy .env.example to .env}
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME:?Copy .env.example to .env}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD:?Copy .env.example to .env}
+      KC_HEALTH_ENABLED: ${KC_HEALTH_ENABLED:?Copy .env.example to .env}
+      KC_METRICS_ENABLED: ${KC_METRICS_ENABLED:?Copy .env.example to .env}
+    ports:
+      - "127.0.0.1:8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      # The official image has Bash but no curl or wget.
+      test:
+        - CMD
+        - bash
+        - -ec
+        - >-
+          exec 3<>/dev/tcp/127.0.0.1/9000;
+          printf 'HEAD /health/ready HTTP/1.0\r\n\r\n' >&3;
+          read -r status <&3;
+          [[ "$$status" == *" 200 "* ]]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 60s
+
+volumes:
+  postgres_data:

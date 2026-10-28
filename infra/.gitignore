@@ -1,0 +1,2 @@
+# Realm exports can contain secrets and user data.
+/realm-data/

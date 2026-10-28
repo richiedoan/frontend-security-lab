@@ -1,0 +1,8 @@
+:root { color-scheme: dark; font-family: system-ui, sans-serif; }
+body { background: #171313; margin: 0; }
+main { margin: 3rem auto; max-width: 52rem; padding: 0 1rem; }
+.warning { background: #f2b705; color: #211900; font-weight: 800; letter-spacing: 0.06em; padding: 0.8rem; }
+section { border-top: 1px solid #a66; margin-top: 2rem; padding-top: 1rem; }
+button, input { font: inherit; margin: 0.25rem; padding: 0.55rem 0.75rem; }
+label { display: block; margin-bottom: 0.75rem; }
+output { border: 1px solid #a66; display: block; margin-top: 1rem; overflow-wrap: anywhere; padding: 1rem; }

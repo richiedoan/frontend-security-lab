@@ -1,0 +1,162 @@
+{
+  "realm": "lab",
+  "displayName": "Day 5 Security Lab",
+  "enabled": true,
+  "sslRequired": "external",
+  "registrationAllowed": false,
+  "resetPasswordAllowed": false,
+  "rememberMe": false,
+  "roles": {
+    "realm": [
+      {
+        "name": "user",
+        "description": "Local lab user"
+      },
+      {
+        "name": "admin",
+        "description": "Local application lab admin; no Keycloak administration permissions"
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "security-web",
+      "name": "Day 5 browser client",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "bearerOnly": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "authorizationServicesEnabled": false,
+      "fullScopeAllowed": false,
+      "redirectUris": [
+        "http://localhost:3000/auth/callback"
+      ],
+      "webOrigins": [
+        "http://localhost:3000"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "oauth2.device.authorization.grant.enabled": "false",
+        "oidc.ciba.grant.enabled": "false"
+      },
+      "defaultClientScopes": [
+        "profile",
+        "email",
+        "roles",
+        "documents:read"
+      ],
+      "optionalClientScopes": [],
+      "protocolMappers": [
+        {
+          "name": "security-api-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.custom.audience": "security-api",
+            "access.token.claim": "true",
+            "id.token.claim": "false"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "security-second-app",
+      "name": "Second app SSO observation",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "bearerOnly": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "authorizationServicesEnabled": false,
+      "fullScopeAllowed": false,
+      "redirectUris": [
+        "http://localhost:3001/second-app/callback"
+      ],
+      "webOrigins": [
+        "http://localhost:3001"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "oauth2.device.authorization.grant.enabled": "false",
+        "oidc.ciba.grant.enabled": "false"
+      },
+      "defaultClientScopes": [
+        "profile"
+      ],
+      "optionalClientScopes": [],
+      "protocolMappers": []
+    }
+  ],
+  "scopeMappings": [
+    {
+      "client": "security-web",
+      "roles": [
+        "user",
+        "admin"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "alice",
+      "firstName": "Alice",
+      "lastName": "Lab",
+      "email": "alice@example.invalid",
+      "enabled": true,
+      "realmRoles": [
+        "user"
+      ],
+      "requiredActions": [
+        "UPDATE_PASSWORD"
+      ],
+      "id": "00000000-0000-4000-8000-000000000001"
+    },
+    {
+      "username": "bob",
+      "firstName": "Bob",
+      "lastName": "Lab",
+      "email": "bob@example.invalid",
+      "enabled": true,
+      "realmRoles": [
+        "user"
+      ],
+      "requiredActions": [
+        "UPDATE_PASSWORD"
+      ],
+      "id": "00000000-0000-4000-8000-000000000002"
+    },
+    {
+      "username": "admin",
+      "firstName": "Admin",
+      "lastName": "Lab",
+      "email": "admin@example.invalid",
+      "enabled": true,
+      "realmRoles": [
+        "user",
+        "admin"
+      ],
+      "requiredActions": [
+        "UPDATE_PASSWORD"
+      ],
+      "id": "00000000-0000-4000-8000-000000000003"
+    }
+  ],
+  "clientScopes": [
+    {
+      "name": "documents:read",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      }
+    }
+  ]
+}
